@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Evan Munoz — Portfolio</title>
+<meta name="description" content="Portfolio of Evan Munoz — projects and work.">
+<style>
+  /* ============================================================
+     COLORS & FONTS — change these to re-theme the whole site
+     ============================================================ */
+  :root {
+    --bg: #0a0a0f;
+    --bg-soft: #12121a;
+    --text: #e8e8f0;
+    --muted: #8b8ba0;
+    --line: #23232f;
+    --accent: #4ade80;   /* terminal green */
+    --accent-2: #38bdf8; /* cyan */
+    --mono: "SF Mono", "JetBrains Mono", "Fira Code", Consolas, monospace;
+    --max: 880px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    color: var(--text); background: var(--bg); line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    background-image: radial-gradient(circle at 20% 0%, rgba(74,222,128,.08), transparent 40%),
+                      radial-gradient(circle at 80% 20%, rgba(56,189,248,.08), transparent 40%);
+    background-attachment: fixed;
+  }
+  .wrap { max-width: var(--max); margin: 0 auto; padding: 0 24px; }
+
+  /* Sticky nav */
+  nav {
+    position: sticky; top: 0; z-index: 20; backdrop-filter: blur(10px);
+    background: rgba(10,10,15,.72); border-bottom: 1px solid var(--line);
+  }
+  nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 58px; }
+  nav .brand { font-family: var(--mono); font-weight: 700; color: var(--text); text-decoration: none; letter-spacing: -.02em; }
+  nav .brand span { color: var(--accent); }
+  nav .navlinks { display: flex; gap: 22px; }
+  nav .navlinks a { font-family: var(--mono); font-size: .85rem; color: var(--muted); text-decoration: none; transition: color .2s; }
+  nav .navlinks a:hover { color: var(--accent); }
+  @media (max-width: 560px) { nav .navlinks { gap: 14px; } nav .navlinks a { font-size: .78rem; } }
+
+  header { padding: 96px 0 64px; }
+  .prompt { font-family: var(--mono); color: var(--accent); font-size: .95rem; margin-bottom: 18px; }
+  .prompt::before { content: "› "; }
+  header h1 { font-size: 3rem; font-weight: 800; letter-spacing: -.03em; line-height: 1.05; }
+  header h1 .blink { color: var(--accent); animation: blink 1.1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  header .tagline { color: var(--muted); font-size: 1.15rem; margin-top: 18px; max-width: 60ch; }
+  header .links { margin-top: 28px; display: flex; gap: 14px; flex-wrap: wrap; }
+  header .links a {
+    font-family: var(--mono); font-size: .85rem; color: var(--text); text-decoration: none;
+    border: 1px solid var(--line); border-radius: 8px; padding: 8px 14px;
+    transition: border-color .2s, color .2s, transform .2s, box-shadow .2s;
+  }
+  header .links a:hover {
+    color: var(--accent); border-color: var(--accent); transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(74,222,128,.15);
+  }
+  header .links a.primary { border-color: var(--accent); color: var(--accent); }
+
+  section { padding: 26px 0; }
+  .section-title {
+    font-family: var(--mono); font-size: .8rem; color: var(--muted);
+    letter-spacing: .05em; margin-bottom: 24px;
+  }
+  .section-title::before { content: "// "; color: var(--accent-2); }
+
+  /* About */
+  .about p { color: var(--muted); font-size: 1.05rem; max-width: 65ch; }
+  .about p + p { margin-top: 14px; }
+
+  /* Skills row */
+  .skills { display: flex; gap: 10px; flex-wrap: wrap; }
+  .skills .chip {
+    font-family: var(--mono); font-size: .82rem; color: var(--text);
+    background: var(--bg-soft); border: 1px solid var(--line); border-radius: 8px; padding: 7px 13px;
+  }
+
+  /* Projects */
+  .projects { display: grid; gap: 18px; }
+  .project {
+    display: block; text-decoration: none; color: inherit;
+    background: var(--bg-soft); border: 1px solid var(--line); border-radius: 14px;
+    padding: 26px 28px; position: relative; overflow: hidden;
+    opacity: 0; transform: translateY(16px);
+  }
+  .project.in { opacity: 1; transform: translateY(0); transition: opacity .6s ease, transform .6s ease; }
+  .project::before {
+    content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+    background: linear-gradient(var(--accent), var(--accent-2)); transform: scaleY(0);
+    transform-origin: top; transition: transform .25s;
+  }
+  .project:hover { border-color: #34343f; transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0,0,0,.4); }
+  .project:hover::before { transform: scaleY(1); }
+  .project h3 { font-size: 1.3rem; font-weight: 700; display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+  .project .year { font-family: var(--mono); font-size: .8rem; color: var(--muted); font-weight: 400; }
+  .project p { color: var(--muted); margin-top: 10px; }
+  .project .tags { margin-top: 16px; display: flex; gap: 8px; flex-wrap: wrap; }
+  .project .tag {
+    font-family: var(--mono); font-size: .73rem; color: var(--accent-2);
+    background: rgba(56,189,248,.08); border: 1px solid rgba(56,189,248,.2);
+    border-radius: 6px; padding: 3px 9px;
+  }
+  .project .arrow { margin-left: auto; color: var(--accent); font-family: var(--mono); }
+
+  /* Contact CTA */
+  .contact { text-align: center; padding: 56px 0 40px; }
+  .contact h2 { font-size: 1.9rem; font-weight: 800; letter-spacing: -.02em; }
+  .contact p { color: var(--muted); margin-top: 12px; }
+  .contact .cta { margin-top: 26px; display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+  .contact .cta a {
+    font-family: var(--mono); font-size: .9rem; text-decoration: none; border-radius: 10px; padding: 12px 22px;
+    transition: transform .2s, box-shadow .2s, background .2s;
+  }
+  .contact .cta a.solid { background: var(--accent); color: #04120a; font-weight: 700; }
+  .contact .cta a.solid:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(74,222,128,.25); }
+  .contact .cta a.ghost { color: var(--text); border: 1px solid var(--line); }
+  .contact .cta a.ghost:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+
+  footer { border-top: 1px solid var(--line); padding: 32px 0; color: var(--muted); font-family: var(--mono); font-size: .82rem; text-align: center; }
+  footer a { color: var(--accent); text-decoration: none; }
+
+  @media (max-width: 600px) { header { padding: 64px 0 40px; } header h1 { font-size: 2.1rem; } }
+</style>
+</head>
+<body>
+
+<!-- ================================================================
+     EDIT YOUR INFO HERE
+     ================================================================ -->
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="#top">evan<span>.dev</span></a>
+    <div class="navlinks">
+      <a href="#about">about</a>
+      <a href="#work">work</a>
+      <a href="#contact">contact</a>
+    </div>
+  </div>
+</nav>
+
+<div class="wrap" id="top">
+  <header>
+    <p class="prompt">whoami</p>
+    <h1>Evan Munoz<span class="blink">_</span></h1>
+    <p class="tagline">
+      I build things. A short line about who you are and what you do goes here —
+      keep it to a sentence or two.
+    </p>
+    <div class="links">
+      <a href="mailto:emmunoz03@yahoo.com">email</a>
+      <a href="https://github.com/yourusername" target="_blank" rel="noopener">github</a>
+      <a href="https://linkedin.com/in/yourusername" target="_blank" rel="noopener">linkedin</a>
+      <!-- RESUME: replace resume.pdf with your file (drop it in this folder) -->
+      <a class="primary" href="resume.pdf" target="_blank" rel="noopener">resume ↗</a>
+    </div>
+  </header>
+
+  <!-- ABOUT — write a couple sentences about yourself -->
+  <section class="about" id="about">
+    <p class="section-title">about</p>
+    <p>
+      Write a short bio here. Two or three sentences is plenty: what you do, what you care about,
+      and what kind of work or role you're looking for. Recruiters read this first.
+    </p>
+  </section>
+
+  <!-- SKILLS — edit the list in the script below (skills array) -->
+  <section id="skills">
+    <p class="section-title">stack</p>
+    <div class="skills" id="skills-row"></div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="work">
+    <p class="section-title">projects</p>
+    <div class="projects" id="projects"></div>
+  </section>
+
+  <!-- CONTACT CTA -->
+  <section class="contact" id="contact">
+    <h2>Let's build something.</h2>
+    <p>Open to opportunities and collaborations. The fastest way to reach me:</p>
+    <div class="cta">
+      <a class="solid" href="mailto:emmunoz03@yahoo.com">Email me</a>
+      <a class="ghost" href="https://github.com/yourusername" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </section>
+
+  <footer>
+    <p>© <span id="year"></span> Evan Munoz — hosted free on GitHub Pages.</p>
+  </footer>
+</div>
+
+<script>
+  /* ================================================================
+     EDIT YOUR SKILLS HERE — short list of tools/technologies
+     ================================================================ */
+  const skills = ["JavaScript", "Python", "React", "HTML/CSS", "Git", "Linux"];
+
+  /* ================================================================
+     EDIT YOUR PROJECTS HERE  (same format across all theme versions)
+     Add 2–3 real projects. Copy a { } block to add, delete to remove.
+     ================================================================ */
+  const projects = [
+    { title: "Project One — replace me", year: "2026", desc: "Replace with a real project: what it is, what you built, and the impact or result in one line.", tags: ["Add", "Tags"], link: "https://github.com/yourusername/project-one" },
+    { title: "Project Two — replace me", year: "2025", desc: "A second real project. Lead with what you did and the tech you used.", tags: ["Add", "Tags"], link: "" }
+    // , { title: "Project Three", year: "2024", desc: "Optional third project.", tags: ["Tag"], link: "" }
+  ];
+
+  /* ---- Rendering (no need to edit below) ---- */
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+  document.getElementById("skills-row").innerHTML = skills.map(s => `<span class="chip">${esc(s)}</span>`).join("");
+
+  document.getElementById("projects").innerHTML = projects.map(p => {
+    const tags = (p.tags||[]).map(t => `<span class="tag">${esc(t)}</span>`).join("");
+    const year = p.year ? `<span class="year">${esc(p.year)}</span>` : "";
+    const arrow = p.link ? `<span class="arrow">→</span>` : "";
+    const inner = `<h3>${esc(p.title)} ${year} ${arrow}</h3><p>${esc(p.desc)}</p>${tags ? `<div class="tags">${tags}</div>` : ""}`;
+    return p.link ? `<a class="project" href="${esc(p.link)}" target="_blank" rel="noopener">${inner}</a>` : `<div class="project">${inner}</div>`;
+  }).join("");
+
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  // reveal-on-scroll
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { threshold: .15 });
+  document.querySelectorAll(".project").forEach((el,i) => { el.style.transitionDelay = (i*60)+"ms"; io.observe(el); });
+</script>
+</body>
+</html>
