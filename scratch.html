@@ -284,14 +284,16 @@ function makeStage(container, opts={}){
   return { scene, camera, controls };
 }
 
-function frame(obj, camera, controls, pad=1.35){
+function frame(obj, camera, controls, pad=1.5){
   const box = new THREE.Box3().setFromObject(obj);
   const size = box.getSize(new THREE.Vector3());
   const center = box.getCenter(new THREE.Vector3());
   obj.position.sub(center); // center at origin
-  const maxDim = Math.max(size.x, size.y, size.z);
-  const dist = (maxDim/2) / Math.tan((camera.fov*Math.PI/180)/2) * pad;
-  camera.position.set(0, size.y*0.12, dist);
+  const vFov = camera.fov*Math.PI/180;
+  const distV = (size.y/2)/Math.tan(vFov/2);
+  const distH = (size.x/2)/(Math.tan(vFov/2)*Math.max(camera.aspect,0.0001));
+  const dist = Math.max(distV, distH) * pad;   // fit BOTH width and height
+  camera.position.set(0, size.y*0.10, dist);
   camera.near = dist/100; camera.far = dist*100; camera.updateProjectionMatrix();
   controls.target.set(0,0,0); controls.update();
 }
@@ -335,7 +337,7 @@ function mountSVG(container, url, opts={}){
     });
     group.scale.y = -1;           // SVG Y points down → flip so text is upright
     scene.add(group);
-    frame(group, camera, controls, 1.25);
+    frame(group, camera, controls, 1.7);
     ld.done();
   }, undefined, ()=> ld.fail('Vector not found (add the .svg file)'));
 }
