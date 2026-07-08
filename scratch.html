@@ -285,16 +285,22 @@ function makeStage(container, opts={}){
 }
 
 function frame(obj, camera, controls, pad=1.5){
-  const box = new THREE.Box3().setFromObject(obj);
-  const size = box.getSize(new THREE.Vector3());
-  const center = box.getCenter(new THREE.Vector3());
-  obj.position.sub(center); // center at origin
+  let box = new THREE.Box3().setFromObject(obj);
+  let size = box.getSize(new THREE.Vector3());
+  let center = box.getCenter(new THREE.Vector3());
+  // normalize any model to a standard size so camera + zoom limits behave
+  const maxDim = Math.max(size.x, size.y, size.z) || 1;
+  const s = 100 / maxDim;
+  obj.scale.multiplyScalar(s);
+  obj.position.set(-center.x*s, -center.y*s, -center.z*s);
+  size = size.multiplyScalar(s);
   const vFov = camera.fov*Math.PI/180;
   const distV = (size.y/2)/Math.tan(vFov/2);
   const distH = (size.x/2)/(Math.tan(vFov/2)*Math.max(camera.aspect,0.0001));
   const dist = Math.max(distV, distH) * pad;   // fit BOTH width and height
   camera.position.set(0, size.y*0.10, dist);
-  camera.near = dist/100; camera.far = dist*100; camera.updateProjectionMatrix();
+  camera.near = Math.max(dist/100, 0.01); camera.far = dist*100; camera.updateProjectionMatrix();
+  controls.minDistance = dist*0.45; controls.maxDistance = dist*4;   // sensible zoom range
   controls.target.set(0,0,0); controls.update();
 }
 
@@ -337,7 +343,7 @@ function mountSVG(container, url, opts={}){
     });
     group.scale.y = -1;           // SVG Y points down → flip so text is upright
     scene.add(group);
-    frame(group, camera, controls, 1.7);
+    frame(group, camera, controls, 1.5);
     ld.done();
   }, undefined, ()=> ld.fail('Vector not found (add the .svg file)'));
 }
