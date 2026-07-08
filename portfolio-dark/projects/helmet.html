@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Custom Cosplay Helmet — Evan Munoz</title>
+<meta name="description" content="Multi-part 3D-printed cosplay helmet — build details, specs, and photos.">
+<link rel="stylesheet" href="../assets/site.css">
+<script type="importmap">
+{ "imports": {
+  "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+}}
+</script>
+</head>
+<body>
+<nav>
+  <div class="wrap">
+    <a class="brand" href="../index.html">evan<span>.dev</span></a>
+    <div class="navlinks"><a href="../index.html#projects">projects</a><a href="../index.html#contact">contact</a></div>
+  </div>
+</nav>
+
+<div class="wrap">
+  <!-- ================= EDIT THIS PROJECT ================= -->
+  <section class="detail-hero">
+    <a class="back" href="../index.html#projects">&#8592; back to projects</a>
+    <p class="kicker" style="margin-top:18px">3D print · cosplay</p>
+    <h1>Custom Cosplay Helmet</h1>
+    <p class="lead">A wearable multi-part sci-fi helmet. Printed across several pieces, test-fit,
+       sanded smooth, primed, and hand-painted in a two-tone forest-green and gunmetal finish.
+       Rotate the raw model below, then see the finished paint job in the photos.</p>
+  </section>
+
+  <!-- Interactive 3D model (the STL you print from) -->
+  <div class="stage">
+    <div class="viewer" data-model="../models/helmet.stl" data-type="stl" data-color="#8a8f98"></div>
+    <div class="ld"><span class="dot"></span>loading 3D…</div>
+    <span class="viewer-hint">drag to rotate · scroll to zoom</span>
+  </div>
+
+  <div class="two-col">
+    <div>
+      <p class="section-title">the print, in real life</p>
+      <div class="gallery">
+        <img src="../photos/helmet-front.jpg" alt="Helmet — front, painted">
+        <img src="../photos/helmet-side.jpg" alt="Helmet — side, painted">
+        <img src="../photos/helmet-parts.jpg" alt="Helmet — assembly / parts">
+        <!-- Add more photos: drop files in /photos and copy a line above -->
+      </div>
+    </div>
+
+    <div>
+      <div class="panel">
+        <h4>specs</h4>
+        <table class="specs">
+          <tr><td>Material</td><td>PLA (add exact filament)</td></tr>
+          <tr><td>Printer</td><td>Bambu Lab (add model)</td></tr>
+          <tr><td>Layer height</td><td>0.2 mm</td></tr>
+          <tr><td>Print time</td><td>add total hours</td></tr>
+          <tr><td>Pieces</td><td>Dome, faceplate, mandible, back (edit)</td></tr>
+          <tr><td>Finish</td><td>Sanded, primed, hand-painted</td></tr>
+          <tr><td>Year</td><td>2025</td></tr>
+        </table>
+      </div>
+      <div class="panel">
+        <h4>parts</h4>
+        <ul class="plist">
+          <li>Green dome / brow <span>1 pc</span></li>
+          <li>Grey faceplate <span>1 pc</span></li>
+          <li>Mandible / chin <span>1 pc</span></li>
+          <li>Rear shell <span>1 pc</span></li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h4>programs used</h4>
+        <ul class="plist">
+          <li>Model source <span>add designer / STL source</span></li>
+          <li>Slicing <span>Bambu Studio</span></li>
+        </ul>
+        <div class="filelinks">
+          <a class="dl" href="../models/helmet.stl" download>&#8595; STL file</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer><p><a href="../index.html">&#8592; evan.dev</a></p></footer>
+</div>
+
+<div class="lb" id="lb"><img src="" alt=""></div>
+<script type="module">
+  import { autoMount } from '../assets/viewer.js';
+  autoMount();
+  const lb=document.getElementById('lb');
+  document.querySelectorAll('.gallery img').forEach(im=>im.addEventListener('click',()=>{lb.querySelector('img').src=im.src;lb.classList.add('open');}));
+  lb.addEventListener('click',()=>lb.classList.remove('open'));
+</script>
+</body>
+</html>
