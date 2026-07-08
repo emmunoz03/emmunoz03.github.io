@@ -330,7 +330,7 @@ function mountSVG(container, url, opts={}){
     const shapes = [];
     data.paths.forEach(p => SVGLoader.createShapes(p).forEach(s => shapes.push(s)));
     shapes.forEach(shape=>{
-      const geo = new THREE.ExtrudeGeometry(shape, { depth, bevelEnabled:true, bevelThickness:2, bevelSize:1.5, bevelSegments:2 });
+      const geo = new THREE.ExtrudeGeometry(shape, { depth, bevelEnabled:false });
       group.add(new THREE.Mesh(geo, mat));
     });
     group.scale.y = -1;           // SVG Y points down → flip so text is upright
