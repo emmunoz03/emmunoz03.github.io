@@ -5,7 +5,143 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Evan Munoz — Portfolio</title>
 <meta name="description" content="Portfolio of Evan Munoz — 3D printing, design, and code.">
-<link rel="stylesheet" href="assets/site.css">
+<style>
+/* ============================================================
+   Shared styles — dark/techy portfolio
+   Edit COLORS below to re-theme every page at once.
+   ============================================================ */
+:root{
+  --bg:#0a0a0f; --bg-soft:#12121a; --text:#e8e8f0; --muted:#8b8ba0;
+  --line:#23232f; --accent:#4ade80; --accent-2:#38bdf8;
+  --mono:"SF Mono","JetBrains Mono","Fira Code",Consolas,monospace; --max:980px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+  color:var(--text);background:var(--bg);line-height:1.6;-webkit-font-smoothing:antialiased;
+  background-image:radial-gradient(circle at 20% 0%,rgba(74,222,128,.08),transparent 40%),
+                   radial-gradient(circle at 80% 20%,rgba(56,189,248,.08),transparent 40%);
+  background-attachment:fixed;
+}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 24px}
+a{color:inherit}
+
+/* Nav */
+nav{position:sticky;top:0;z-index:20;backdrop-filter:blur(10px);
+  background:rgba(10,10,15,.72);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:58px}
+nav .brand{font-family:var(--mono);font-weight:700;color:var(--text);text-decoration:none;letter-spacing:-.02em}
+nav .brand span{color:var(--accent)}
+nav .navlinks{display:flex;gap:22px}
+nav .navlinks a{font-family:var(--mono);font-size:.85rem;color:var(--muted);text-decoration:none;transition:color .2s}
+nav .navlinks a:hover{color:var(--accent)}
+@media(max-width:560px){nav .navlinks{gap:16px}nav .navlinks a{font-size:.8rem}}
+
+/* Headings / sections */
+header.hero{padding:96px 0 56px}
+.prompt{font-family:var(--mono);color:var(--accent);font-size:.95rem;margin-bottom:18px}
+.prompt::before{content:"\203A  "}
+h1.big{font-size:3rem;font-weight:800;letter-spacing:-.03em;line-height:1.05}
+.blink{color:var(--accent);animation:blink 1.1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.tagline{color:var(--muted);font-size:1.15rem;margin-top:18px;max-width:60ch}
+.links{margin-top:28px;display:flex;gap:14px;flex-wrap:wrap}
+.links a{font-family:var(--mono);font-size:.85rem;color:var(--text);text-decoration:none;
+  border:1px solid var(--line);border-radius:8px;padding:8px 14px;
+  transition:border-color .2s,color .2s,transform .2s,box-shadow .2s}
+.links a:hover{color:var(--accent);border-color:var(--accent);transform:translateY(-2px);box-shadow:0 6px 20px rgba(74,222,128,.15)}
+.links a.primary{border-color:var(--accent);color:var(--accent)}
+section{padding:26px 0}
+.section-title{font-family:var(--mono);font-size:.8rem;color:var(--muted);letter-spacing:.05em;margin-bottom:24px}
+.section-title::before{content:"// ";color:var(--accent-2)}
+.about p{color:var(--muted);font-size:1.05rem;max-width:65ch}
+.skills{display:flex;gap:10px;flex-wrap:wrap}
+.chip{font-family:var(--mono);font-size:.82rem;color:var(--text);background:var(--bg-soft);border:1px solid var(--line);border-radius:8px;padding:7px 13px}
+
+/* Project cards (landing) */
+.proj-list{display:flex;flex-direction:column;gap:22px}
+.card{display:grid;grid-template-columns:1fr 1fr;gap:30px;align-items:center;
+  background:var(--bg-soft);border:1px solid var(--line);border-radius:18px;padding:26px 30px;
+  text-decoration:none;color:inherit;position:relative;overflow:hidden;
+  opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease,border-color .25s,box-shadow .25s}
+.card.in{opacity:1;transform:translateY(0)}
+.card:hover{border-color:#34343f;box-shadow:0 16px 46px rgba(0,0,0,.45)}
+.card:nth-child(even) .viewer-wrap{order:2}
+.viewer-wrap{position:relative;min-height:300px;height:300px;border-radius:14px;overflow:hidden}
+.viewer-wrap::before{content:"";position:absolute;inset:0;z-index:0;
+  background:radial-gradient(circle at 50% 55%,rgba(74,222,128,.16),rgba(56,189,248,.07) 45%,transparent 70%)}
+.viewer{position:absolute;inset:0;z-index:1}
+.viewer-hint{position:absolute;left:10px;bottom:8px;z-index:2;font-family:var(--mono);font-size:.68rem;color:var(--muted);
+  background:rgba(10,10,15,.5);padding:3px 8px;border-radius:6px;pointer-events:none}
+.card .kicker{font-family:var(--mono);font-size:.78rem;color:var(--accent-2);letter-spacing:.05em}
+.card h3{font-size:1.5rem;font-weight:800;letter-spacing:-.02em;margin-top:8px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.card h3 .year{font-family:var(--mono);font-size:.8rem;color:var(--muted);font-weight:400}
+.card p{color:var(--muted);margin-top:12px}
+.tags{margin-top:16px;display:flex;gap:8px;flex-wrap:wrap}
+.tag{font-family:var(--mono);font-size:.73rem;color:var(--accent-2);background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.2);border-radius:6px;padding:3px 9px}
+.card .open{margin-top:18px;font-family:var(--mono);font-size:.85rem;color:var(--accent);display:inline-flex;align-items:center;gap:6px}
+.card:hover .open{gap:12px;transition:gap .2s}
+@media(max-width:680px){
+  .card{grid-template-columns:1fr;padding:22px}
+  .viewer-wrap{order:-1!important;height:250px;min-height:250px}
+}
+
+/* Detail page */
+.detail-hero{padding:40px 0 10px}
+.back{font-family:var(--mono);font-size:.85rem;color:var(--muted);text-decoration:none}
+.back:hover{color:var(--accent)}
+.detail-hero h1{font-size:2.4rem;font-weight:800;letter-spacing:-.02em;margin-top:18px}
+.detail-hero .kicker{font-family:var(--mono);font-size:.8rem;color:var(--accent-2);letter-spacing:.05em}
+.detail-hero .lead{color:var(--muted);font-size:1.15rem;margin-top:14px;max-width:70ch}
+.stage{position:relative;height:440px;border-radius:18px;overflow:hidden;border:1px solid var(--line);
+  background:radial-gradient(circle at 50% 55%,rgba(74,222,128,.14),rgba(56,189,248,.06) 45%,transparent 72%),var(--bg-soft);margin-top:26px}
+.stage .viewer{position:absolute;inset:0}
+.stage .viewer-hint{position:absolute;left:12px;bottom:10px;font-family:var(--mono);font-size:.72rem;color:var(--muted);background:rgba(10,10,15,.5);padding:4px 9px;border-radius:6px;pointer-events:none}
+.two-col{display:grid;grid-template-columns:1.4fr 1fr;gap:30px;margin-top:34px}
+@media(max-width:760px){.two-col{grid-template-columns:1fr}.stage{height:340px}}
+.gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.gallery img{width:100%;border-radius:12px;border:1px solid var(--line);display:block;cursor:zoom-in;transition:transform .25s,box-shadow .25s}
+.gallery img:hover{transform:scale(1.02);box-shadow:0 12px 34px rgba(0,0,0,.5)}
+.panel{background:var(--bg-soft);border:1px solid var(--line);border-radius:14px;padding:22px 24px;margin-bottom:18px}
+.panel h4{font-family:var(--mono);font-size:.8rem;color:var(--accent-2);letter-spacing:.05em;margin-bottom:14px}
+.specs{width:100%;border-collapse:collapse;font-size:.92rem}
+.specs td{padding:7px 0;border-bottom:1px solid var(--line);vertical-align:top}
+.specs td:first-child{color:var(--muted);width:42%;font-family:var(--mono);font-size:.82rem}
+.plist{list-style:none;display:flex;flex-direction:column;gap:9px}
+.plist li{display:flex;justify-content:space-between;gap:12px;font-size:.92rem;border-bottom:1px solid var(--line);padding-bottom:8px}
+.plist li span{color:var(--muted)}
+.filelinks{margin-top:18px;display:flex;gap:12px;flex-wrap:wrap}
+.filelinks a{font-family:var(--mono);font-size:.82rem;text-decoration:none;border-radius:9px;padding:10px 16px;transition:transform .2s,box-shadow .2s,border-color .2s,color .2s}
+.filelinks a.dl{background:var(--accent);color:#04120a;font-weight:700}
+.filelinks a.dl:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(74,222,128,.25)}
+.filelinks a.link{color:var(--text);border:1px solid var(--line)}
+.filelinks a.link:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px)}
+
+/* Contact + footer */
+.contact{text-align:center;padding:56px 0 40px}
+.contact h2{font-size:1.9rem;font-weight:800;letter-spacing:-.02em}
+.contact p{color:var(--muted);margin-top:12px}
+.cta{margin-top:26px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.cta a{font-family:var(--mono);font-size:.9rem;text-decoration:none;border-radius:10px;padding:12px 22px;transition:transform .2s,box-shadow .2s,background .2s}
+.cta a.solid{background:var(--accent);color:#04120a;font-weight:700}
+.cta a.solid:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(74,222,128,.25)}
+.cta a.ghost{color:var(--text);border:1px solid var(--line)}
+.cta a.ghost:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px)}
+footer{border-top:1px solid var(--line);padding:32px 0;color:var(--muted);font-family:var(--mono);font-size:.82rem;text-align:center}
+footer a{color:var(--accent);text-decoration:none}
+
+/* Lightbox */
+.lb{position:fixed;inset:0;background:rgba(5,5,8,.92);z-index:50;display:none;align-items:center;justify-content:center;padding:30px;cursor:zoom-out}
+.lb.open{display:flex}
+.lb img{max-width:95%;max-height:92%;border-radius:10px}
+
+/* loader */
+.ld{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:3;font-family:var(--mono);font-size:.78rem;color:var(--muted)}
+.ld .dot{width:9px;height:9px;border-radius:50%;background:var(--accent);margin-right:8px;animation:pulse 1s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.3;transform:scale(.8)}50%{opacity:1;transform:scale(1.2)}}
+
+</style>
 <script type="importmap">
 { "imports": {
   "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
@@ -69,34 +205,34 @@
       <!-- Scratch sign (3D extruded from its vector) -->
       <div class="card">
         <div class="viewer-wrap">
-          <div class="viewer" data-model="models/scratch.svg" data-type="svg" data-color="#e9edf2" data-depth="55" data-card="true"></div>
+          <div class="viewer" data-model="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48c3ZnIGlkPSJMYXllcl8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjU5Ljc0IDcxNC4wNCI+PHBhdGggZmlsbD0iI2U5ZWRmMiIgZD0iTTI0NC43OSwzNzAuMzVjLTEuODEtMi44MS0zLjkxLTUuNDItNi4yOS03Ljg1LTEwLjExLTEwLjMtMjcuMjMtMTguMjctNTEuMzUtMjMuOTJsLTM4LjY2LTkuMTVjLTEyLjU4LTIuODktMjEuNTYtNi45NC0yNi45Ny0xMi4xMy01LjM5LTUuMTctOC4wOC0xMS40My04LjA4LTE4Ljc2di0uMjNjMC02LjQsMS43MS0xMi4wMSw1LjE3LTE2LjgsMy40NC00LjgyLDguMzgtOC41MiwxNC44Mi0xMS4xMSw2LjQ0LTIuNiwxNC4wMS0zLjg5LDIyLjcxLTMuODksMTMuNjIsMCwyNC40MiwzLjMzLDMyLjM2LDkuOTYsNy45NSw2LjY0LDEyLjU5LDE1LjIyLDEzLjk0LDI1LjczbC4yMywxLjYxaDQ1LjYxdi0yLjc0Yy0uNzUtMTMuNTctNC45MS0yNS45LTEyLjQ4LTM2Ljk2cy0xOC4wOC0xOS44LTMxLjU3LTI2LjJjLTEzLjQ5LTYuNC0yOS41MS05LjYyLTQ4LjA5LTkuNjJzLTM0LjA5LDMuMDEtNDcuODgsOS4wNWMtMTMuNzksNi4wMi0yNC41LDE0LjQ5LTMyLjE0LDI1LjM5LTcuNjQsMTAuOTEtMTEuNDYsMjMuNjItMTEuNDYsMzguMTF2LjIzYzAsMTcuMzgsNS41NywzMS42OSwxNi43NSw0Mi45LDExLjE2LDExLjIxLDI3Ljk4LDE5LjQxLDUwLjQ2LDI0LjZsMzguNjQsOC45MmMxMi43NCwzLjIxLDIxLjU4LDcuMTcsMjYuNTMsMTEuODksNC45NCw0Ljc0LDcuNCwxMSw3LjQsMTguNzZ2LjIzYzAsNi41Ny0xLjg2LDEyLjIxLTUuNjEsMTYuOTNzLTkuMDcsOC4zNS0xNS45NSwxMC44OGMtNi45LDIuNTEtMTUuMjksMy43OC0yNS4xNywzLjc4LTE0Ljg0LDAtMjYuMzgtMy4wOS0zNC42Mi05LjI4LTguMjMtNi4xNy0xMy41Ny0xNC43Ni0xNS45NS0yNS43M2wtLjQ1LTIuM2gtNDguMTFsLjIzLDIuMDZjMS42NSwxNC42NCw2LjUyLDI3LjUsMTQuNjEsMzguNTYsOC4wOCwxMS4wNiwxOS4yMSwxOS42OCwzMy4zNywyNS44NSwxNC4xNyw2LjE5LDMxLjE0LDkuMjcsNTAuOTIsOS4yNywxOC41NywwLDM1LjA4LTMuMTMsNDkuNTQtOS4zNywxNC40Ny02LjI1LDI1LjgyLTE0Ljk2LDM0LjA1LTI2LjEsNy4xNy05LjY4LDExLjIzLTIwLjcxLDEyLjE2LTMzLjA5Ii8+PHBhdGggZmlsbD0iI2U5ZWRmMiIgZD0iTTQ1NS41OCwzMDAuODhjLTIuNC0xMC40MS02LjYtMjAuMjYtMTIuNjMtMjkuNTgtOC40LTEyLjk2LTE5Ljk2LTIzLjM3LTM0LjcyLTMxLjIyLTE0Ljc3LTcuODctMzIuMjYtMTEuNzktNTIuNDgtMTEuNzktMjIuNDcsMC00Mi4xLDUuMDctNTguODksMTUuMjItMTYuNzksMTAuMTUtMjkuNzgsMjQuNTItMzguOTksNDMuMTQtOS4yMiwxOC42MS0xMy44MSw0MC42Ni0xMy44MSw2Ni4xM3YuMjNjMCw1Ljk3LjIzLDExLjc2LjczLDE3LjM1LDEuMjYsMTQuNDEsNC4xNiwyNy41Niw4LjY4LDM5LjQ5LDEuMjYsMy4zNiwyLjY1LDYuNiw0LjE4LDkuNzUsOS4wNywxOC43NiwyMi4wMywzMy4yNywzOC44OCw0My40OHMzNi43NSwxNS4zMiw1OS42NywxNS4zMmMxOS4wMywwLDM1Ljg1LTMuNzYsNTAuNDYtMTEuMzMsMTQuNjEtNy41NCwyNi4zNy0xNy43NywzNS4yOC0zMC42Niw2LjM1LTkuMTgsMTAuOS0xOS4xNiwxMy42NC0yOS45M000NTUuNTgsMzkxLjQ1aC00NC4zMmwtLjIyLDEuODNjLTMuMDEsMTIuOTgtOS4xMiwyMy40Ni0xOC4zMiwzMS40Ny05LjIzLDgtMjEuMzMsMTIuMDEtMzYuMzEsMTIuMDEtMTIuNTgsMC0yMy41Ni0zLjI4LTMyLjkyLTkuODUtOS4zNy02LjU1LTE2LjY3LTE2LjA1LTIxLjkxLTI4LjQ4LTUuMjQtMTIuNDQtNy44Ny0yNy40Mi03Ljg3LTQ0Ljk3di0uMjNjMC0xNy4wOCwyLjU4LTMxLjg5LDcuNzUtNDQuNHMxMi40NC0yMi4xNiwyMS44MS0yOC45NSwyMC4yNi0xMC4xOCwzMi43MS0xMC4xOGMxNS44NywwLDI4LjM1LDQuMzEsMzcuNDEsMTIuOTMsOS4wNyw4LjYyLDE0Ljg3LDE4LjgxLDE3LjQyLDMwLjU2bC40NSwyLjA2aDQ0LjMyIi8+PHBhdGggZmlsbD0iI2U5ZWRmMiIgZD0iTTU2OS40NCwyNzQuMzVjLS40Mi0uMDctLjg1LS4xMi0xLjI4LS4xOC0zLjg5LS41My04LjIzLS44LTEzLjAzLS44LTEwLjM1LDAtMTkuMzMsMi4yNi0yNi45OCw2Ljc1LTcuNjQsNC40OS0xMy40NywxMC45OC0xNy41MiwxOS40NS00LjA2LDguNDctNi4wNywxOC42NS02LjA3LDMwLjU2djE0My40NmgtNDguOTl2LTI0MC43M2g0OC45OXY0MS4xOWguOWMzLjc0LTE0LjE3LDEwLjQxLTI1LjM1LDIwLTMzLjUyLDkuNTgtOC4xNSwyMS4xMy0xMi4yNCwzNC42Mi0xMi4yNCwzLjU5LDAsNi44NS4yLDkuNzguNTgsMi45MS4zOCw1LjI3LjgsNy4wNywxLjI1djMyLjI2Ii8+PHBhdGggZmlsbD0iI2U5ZWRmMiIgZD0iTTY3Ny4yNiwzMzEuNzNjMC0uMDctLjAyLS4xNS0uMDItLjIybC0zLjU2LjIyLTMzLjU1LDIuMDZjLTI3Ljg2LDEuNjgtNDkuNDcsOC42NS02NC44MywyMC45My0xNS4zNSwxMi4yOS0yMy4wNCwyOC45Ni0yMy4wNCw1MC4wMXYuNDVjMCwxNC4zNiwzLjI5LDI3LjAyLDkuODgsMzgsNi42LDEwLjk4LDE1LjgyLDE5LjUzLDI3LjY1LDI1LjY0LDExLjg0LDYuMTEsMjUuNjIsOS4xNSw0MS4zNiw5LjE1LDcuMywwLDE0LjI5LS44MywyMC45OC0yLjUsMS4zNS0uMzMsMi42OC0uNzIsNC4wMS0xLjExLDUuMDYtMTIuODMsOS4yMy0yNS45LDEyLjU2LTM5LjE5LjEyLS40Ny4yMy0uOTEuMzMtMS4zOC0xLjI4LjUyLTIuNTguOTYtMy45MSwxLjM4LTYuNDIsMi0xMy4zMiwyLjk4LTIwLjcxLDIuOTgtMTMuMDMsMC0yMy40Ny0zLjA0LTMxLjM0LTkuMTUtNy44Ny02LjA5LTExLjgxLTE0LjQxLTExLjgxLTI0Ljk0di0uNDdjMC0xMC4yMSwzLjk0LTE4LjQyLDExLjgxLTI0LjU5LDcuODctNi4xOSwxOS4wNi05LjczLDMzLjU5LTEwLjY1bDI3Ljg2LTEuNzgsMy41OC0uMjNjLjEtMy4wOS4xMy02LjIuMTMtOS4zLDAtOC40OC0uMzItMTYuOTMtLjk2LTI1LjNaTTYwOC4wMSwzMDEuOThjMi4xLTkuNjIsNy4zNy0xNy40NywxNS44NC0yMy41Nyw4LjQ3LTYuMTEsMTkuNjYtOS4xNywzMy42LTkuMTcsMS43NiwwLDMuNDYuMDcsNS4xMi4xNywxLjI1LjA4LDIuNDguMTgsMy42OC4zMy0uMDItLjEyLS4wNS0uMjItLjA4LS4zMy0zLjYxLTEyLjY5LTcuOTgtMjUuMTctMTMuMTgtMzcuNDEtLjQ3LTEuMTMtLjk1LTIuMjUtMS40My0zLjM2LS4wMy0uMDctLjA1LS4xMi0uMDgtLjE4LTEuMTguMDUtMi4zNS4xLTMuNDkuMTgtMTQuODIsMS0yNy45MSw0LjA4LTM5LjMxLDkuMjctMTMuMzQsNi4wNy0yMy45NCwxNC4yMi0zMS43NCwyNC40Ny0uNDUuNTctLjg4LDEuMTUtMS4zLDEuNzMtLjgsMS4xMS0xLjU2LDIuMjMtMi4yOCwzLjM4LTEuNDUsMi4yMy0yLjc0LDQuNTItMy45MSw2Ljg3LS4xLjItLjIuMzgtLjMuNTgtMy45OSw4LjItNi40LDE3LjA3LTcuMjIsMjYuNThsLS4yMywyLjUzaDQ1Ljg2bC40NS0yLjA2WiIvPjxwYXRoIGZpbGw9IiNlOWVkZjIiIGQ9Ik04NTAuOTgsMjc3Ljg1di0zOS4zNmgtNDQuMjd2LTYyLjdoLTQ5Ljg5djYyLjdoLTMzLjk0djM5LjM2aDMzLjk0djEzNy43NmMwLDI0LjExLDUuNzMsNDEuNTMsMTcuMTksNTIuMjksMTEuNDYsMTAuNzYsMjguODgsMTYuMTMsNTIuMjUsMTYuMTMsNC45NSwwLDkuNTktLjIzLDEzLjkzLS42OSw0LjM1LS40Niw3Ljk0LS45MiwxMC43OS0xLjM4di0zOC4yMWMtMS44LjE1LTMuNzguMzQtNS45NS41Ny0yLjE3LjIzLTQuNTMuMzQtNy4wOC4zNC0xMC4zNCwwLTE4LjEzLTIuMjUtMjMuMzctNi43NS01LjI1LTQuNS03Ljg3LTEyLjg1LTcuODctMjUuMDZ2LTEzNS4wMWg0NC4yN1oiLz48cGF0aCBmaWxsPSIjZTllZGYyIiBkPSJNMTAwNS40MSwzOTcuMDhsLS4yMywxLjgzYy0zLDEyLjk3LTkuMSwyMy40Ni0xOC4zMiwzMS40Ny05LjIyLDgtMjEuMzEsMTIuMDEtMzYuMywxMi4wMS0xMi41OSwwLTIzLjU2LTMuMjgtMzIuOTMtOS44NC05LjM3LTYuNTYtMTYuNjctMTYuMDYtMjEuOTEtMjguNDktNS4yNC0xMi40My03Ljg2LTI3LjQyLTcuODYtNDQuOTd2LS4yM2MwLTE3LjA5LDIuNTgtMzEuODksNy43NS00NC40LDUuMTctMTIuNTEsMTIuNDMtMjIuMTYsMjEuOC0yOC45NSw5LjM2LTYuNzksMjAuMjYtMTAuMTgsMzIuNy0xMC4xOCwxNS44OCwwLDI4LjM1LDQuMzEsMzcuNDIsMTIuOTMsOS4wNiw4LjYyLDE0Ljg3LDE4LjgxLDE3LjQyLDMwLjU1bC40NSwyLjA2aDQ2LjUybC0uMTgtMS41My0uMDQtLjNjLTEuMzUtMTUuMS02LjIyLTI5LjE0LTE0LjYxLTQyLjExLTguMzktMTIuOTctMTkuOTYtMjMuMzgtMzQuNzItMzEuMjQtMTQuNzYtNy44Ni0zMi4yNS0xMS43OC01Mi40OC0xMS43OC0yMi40NywwLTQyLjExLDUuMDctNTguODgsMTUuMjItMTYuNzgsMTAuMTUtMjkuNzgsMjQuNTMtMzksNDMuMTMtOS4yMSwxOC42Mi0xMy44Miw0MC42Ni0xMy44Miw2Ni4xNHYuMjNjMCwyNS42Myw0LjUzLDQ3LjgyLDEzLjYsNjYuNTksOS4wNiwxOC43NywyMi4wMiwzMy4yNiwzOC44OCw0My40OCwxNi44NSwxMC4yMiwzNi43NSwxNS4zMyw1OS42NywxNS4zMywxOS4wMywwLDM1Ljg1LTMuNzcsNTAuNDUtMTEuMzMsMTQuNjEtNy41NSwyNi4zNy0xNy43NywzNS4yOS0zMC42Niw4LjMyLTEyLjAzLDEzLjU0LTI1LjQyLDE1LjY2LTQwLjE3LjE1LTEuMDYuMjktMi4xMi40MS0zLjE5di0xLjZoLTQ2Ljc0WiIvPjxwYXRoIGZpbGw9IiNlOWVkZjIiIGQ9Ik0xMjQ4LjI5LDI3OS42OGMtNi45Ny0xNC41LTE2LjcxLTI1Ljc0LTI5LjIyLTMzLjc1LTEyLjUxLTguMDEtMjcuMjMtMTIuMDEtNDQuMTYtMTIuMDFzLTMyLjc4LDMuODUtNDUuMjksMTEuNTVjLTEyLjUxLDcuNzEtMjEuODQsMTguNTgtMjcuOTgsMzIuNjFoLTEuMTJ2LTEyOS4wNmgtNDguNzd2MzMwLjIxaDQ4Ljc3di0xMzkuMzZjMC0xMi42NiwyLjMyLTIzLjcyLDYuOTctMzMuMTgsNC42NC05LjQ2LDExLjEyLTE2Ljg1LDE5LjQ0LTIyLjIsOC4zMS01LjMzLDE4LjAxLTguMDEsMjkuMS04LjAxLDE3LjA4LDAsMzAuMzQsNS41OCwzOS43OCwxNi43MSw5LjQ0LDExLjE0LDE0LjE2LDI2LjcsMTQuMTYsNDYuNjh2MTM5LjM2aDQ4Ljc3di0xNDguNzRjMC0xOS4zOC0zLjQ4LTM2LjMxLTEwLjQ1LTUwLjhaIi8+PGNpcmNsZSBmaWxsPSIjZTllZGYyIiBjeD0iMzU2Ljc2IiBjeT0iMzU3LjI4IiByPSIyOC45Ii8+PHBhdGggZmlsbD0iI2U5ZWRmMiIgZD0iTTY3OC4wOSwzNjYuMzN2LjIzYy0uNjUsMjIuODQtMy42OCw0NS4zLTkuMDcsNjcuMjEiLz48cGF0aCBmaWxsPSIjZTllZGYyIiBkPSJNNzEzLjAxLDMyOS41M2MtMi41Ni0zMy44LTkuODYtNjYuNzctMjEuODEtOTguNDEtMS42NS00LjM4LTMuMzktOC43My01LjIyLTEzLjA2LTE3Ljk4LTQyLjUyLTQzLjczLTgwLjctNzYuNTEtMTEzLjQ5LTMyLjc5LTMyLjc3LTcwLjk3LTU4LjUyLTExMy40OS03Ni41MUM0NTEuOTcsOS40NSw0MDUuMiwwLDM1Ny4wMSwwcy05NC45NCw5LjQ1LTEzOC45NywyOC4wNmMtNDIuNTIsMTcuOTgtODAuNyw0My43My0xMTMuNDcsNzYuNTEtMzIuNzksMzIuNzktNTguNTIsNzAuOTctNzYuNTEsMTEzLjQ5QzkuNDUsMjYyLjA3LDAsMzA4Ljg0LDAsMzU3LjAzczkuNDUsOTQuOTQsMjguMDYsMTM4Ljk3YzE3Ljk4LDQyLjUyLDQzLjcyLDgwLjcsNzYuNTEsMTEzLjQ3LDMyLjc3LDMyLjc5LDcwLjk1LDU4LjUyLDExMy40Nyw3Ni41MSw0NC4wMywxOC42MSw5MC44LDI4LjA2LDEzOC45NywyOC4wNnM5NC45NS05LjQ1LDEzOC45Ny0yOC4wNmM0Mi41Mi0xNy45OCw4MC43LTQzLjcyLDExMy40OS03Ni41MSwzMi43Ny0zMi43Nyw1OC41Mi03MC45NSw3Ni41MS0xMTMuNDcsNy42NC0xOC4wNywxMy43Mi0zNi41NiwxOC4yNS01NS40Myw1Ljk3LTI0Ljg1LDkuMjMtNTAuMzYsOS43My03Ni4yNy4wNS0yLjQzLjA4LTQuODYuMDgtNy4yNywwLTkuMjItLjM1LTE4LjQtMS4wMy0yNy41Wk02NjkuMDIsNDMzLjc3Yy0uMS40Ny0uMjIuOTEtLjMzLDEuMzgtMy4zMywxMy4yOS03LjUsMjYuMzctMTIuNTYsMzkuMTktLjEzLjM3LS4yOC43NS0uNDMsMS4xMS0uODgsMi4yMS0xLjc4LDQuNDEtMi43MSw2LjU5LTE2LjE3LDM4LjI0LTM5LjMzLDcyLjYxLTY4Ljg0LDEwMi4xMS0yOS41MSwyOS41MS02My44Niw1Mi42Ny0xMDIuMTEsNjguODUtMzkuNTksMTYuNzQtODEuNjYsMjUuMjQtMTI1LjAzLDI1LjI0cy04NS40NC04LjUtMTI1LjAxLTI1LjI0Yy0zOC4yNC0xNi4xOS03Mi42MS0zOS4zNC0xMDIuMTEtNjguODUtMjkuNTEtMjkuNDktNTIuNjctNjMuODYtNjguODUtMTAyLjExLTE2Ljc0LTM5LjU5LTI1LjI0LTgxLjY1LTI1LjI0LTEyNS4wMXM4LjUtODUuNDQsMjUuMjQtMTI1LjAzYzE2LjE5LTM4LjI0LDM5LjM0LTcyLjYsNjguODUtMTAyLjExLDI5LjQ5LTI5LjUxLDYzLjg2LTUyLjY3LDEwMi4xMS02OC44NCwzOS41OC0xNi43NSw4MS42NS0yNS4yNCwxMjUuMDEtMjUuMjRzODUuNDQsOC40OCwxMjUuMDMsMjUuMjRjMzguMjQsMTYuMTcsNzIuNiwzOS4zMywxMDIuMTEsNjguODQsMjguNiwyOC42LDUxLjIyLDYxLjczLDY3LjMyLDk4LjU2LjAzLjA3LjA1LjEyLjA4LjE4LjQ4LDEuMTEuOTYsMi4yMywxLjQzLDMuMzYsNS4xOSwxMi4yNCw5LjU3LDI0LjcyLDEzLjE4LDM3LjQxLjAzLjEyLjA3LjIyLjA4LjMzLDUuNjcsMjAuMTMsOS4zNSw0MC43NiwxMSw2MS43NywwLC4wNy4wMi4xNS4wMi4yMi42NSw4LjM3Ljk2LDE2LjgyLjk2LDI1LjMsMCwzLjA5LS4wMyw2LjItLjEzLDkuMyIvPjwvc3ZnPg==" data-type="svg" data-color="#e9edf2" data-depth="55" data-card="true"></div>
           <div class="ld"><span class="dot"></span>loading 3D…</div>
           <span class="viewer-hint">drag to rotate</span>
         </div>
         <div class="card-body">
           <p class="kicker">3D print · dimensional signage</p>
-          <a href="projects/scratch.html" style="text-decoration:none"><h3>“Scratch” Signage <span class="year">2025</span></h3></a>
+          <a href="scratch.html" style="text-decoration:none"><h3>“Scratch” Signage <span class="year">2025</span></h3></a>
           <p>Large-format 3D-printed wordmark and ring — modeled from vector art, printed in
              sections, and finished as one clean ~4-ft sign.</p>
           <div class="tags"><span class="tag">3D Print</span><span class="tag">Signage</span><span class="tag">Bambu Studio</span></div>
-          <a class="open" href="projects/scratch.html">View project &#8594;</a>
+          <a class="open" href="scratch.html">View project &#8594;</a>
         </div>
       </div>
 
       <!-- Cosplay helmet (STL) -->
       <div class="card">
         <div class="viewer-wrap">
-          <div class="viewer" data-model="models/helmet.stl" data-type="stl" data-color="#8a8f98" data-card="true"></div>
+          <div class="viewer" data-model="helmet.stl" data-type="stl" data-color="#8a8f98" data-card="true"></div>
           <div class="ld"><span class="dot"></span>loading 3D…</div>
           <span class="viewer-hint">drag to rotate</span>
         </div>
         <div class="card-body">
           <p class="kicker">3D print · cosplay</p>
-          <a href="projects/helmet.html" style="text-decoration:none"><h3>Custom Cosplay Helmet <span class="year">2025</span></h3></a>
+          <a href="helmet.html" style="text-decoration:none"><h3>Custom Cosplay Helmet <span class="year">2025</span></h3></a>
           <p>Multi-part 3D-printed sci-fi helmet — printed, sanded, primed, and hand-painted in a
              two-tone forest-green and gunmetal finish.</p>
           <div class="tags"><span class="tag">3D Print</span><span class="tag">Cosplay</span><span class="tag">Finishing</span></div>
-          <a class="open" href="projects/helmet.html">View project &#8594;</a>
+          <a class="open" href="helmet.html">View project &#8594;</a>
         </div>
       </div>
 
@@ -116,7 +252,148 @@
 </div>
 
 <script type="module">
-  import { autoMount } from './assets/viewer.js';
+  /* ============================================================
+   3D viewer engine (three.js)
+   - mountSTL(container, url, opts)  → loads an .stl mesh
+   - mountSVG(container, url, opts)  → extrudes an .svg into 3D
+   Both give orbit controls + gentle auto-rotate.
+   No editing needed here; change models via the HTML data-* attrs.
+   ============================================================ */
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { STLLoader } from 'three/addons/loaders/STLLoader.js';
+import { SVGLoader } from 'three/addons/loaders/SVGLoader.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { ThreeMFLoader } from 'three/addons/loaders/3MFLoader.js';
+
+function makeStage(container, opts={}){
+  const w = container.clientWidth || 400, h = container.clientHeight || 300;
+  const renderer = new THREE.WebGLRenderer({ antialias:true, alpha:true });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.setSize(w, h);
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.05;
+  container.appendChild(renderer.domElement);
+
+  const scene = new THREE.Scene();
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+
+  const camera = new THREE.PerspectiveCamera(38, w/h, 0.1, 5000);
+  camera.position.set(0, 0, 100);
+
+  const key = new THREE.DirectionalLight(0xffffff, 1.6); key.position.set(60,80,90); scene.add(key);
+  const rim = new THREE.DirectionalLight(0x9fe8c0, 0.7); rim.position.set(-70,20,-60); scene.add(rim);
+  scene.add(new THREE.AmbientLight(0xffffff, 0.35));
+
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true; controls.dampingFactor = 0.08;
+  controls.enablePan = false; controls.autoRotate = true; controls.autoRotateSpeed = 1.1;
+  controls.minDistance = 10; controls.maxDistance = 1200;
+  if(opts.card){
+    // landing-card mode: don't hijack page scroll; let vertical touch-scroll pass through
+    controls.enableZoom = false;
+    renderer.domElement.style.touchAction = 'pan-y';
+  }
+
+  function onResize(){
+    const W = container.clientWidth, H = container.clientHeight;
+    if(!W||!H) return;
+    camera.aspect = W/H; camera.updateProjectionMatrix(); renderer.setSize(W,H);
+  }
+  new ResizeObserver(onResize).observe(container);
+
+  // pause auto-rotate while the user is dragging, resume shortly after
+  let idle; controls.addEventListener('start', ()=>{ controls.autoRotate=false; clearTimeout(idle); });
+  controls.addEventListener('end', ()=>{ clearTimeout(idle); idle=setTimeout(()=>controls.autoRotate=true, 2500); });
+
+  (function loop(){ requestAnimationFrame(loop); controls.update(); renderer.render(scene,camera); })();
+  return { scene, camera, controls };
+}
+
+function frame(obj, camera, controls, pad=1.35){
+  const box = new THREE.Box3().setFromObject(obj);
+  const size = box.getSize(new THREE.Vector3());
+  const center = box.getCenter(new THREE.Vector3());
+  obj.position.sub(center); // center at origin
+  const maxDim = Math.max(size.x, size.y, size.z);
+  const dist = (maxDim/2) / Math.tan((camera.fov*Math.PI/180)/2) * pad;
+  camera.position.set(0, size.y*0.12, dist);
+  camera.near = dist/100; camera.far = dist*100; camera.updateProjectionMatrix();
+  controls.target.set(0,0,0); controls.update();
+}
+
+function loader(container){
+  const el = container.parentElement.querySelector('.ld');
+  return { done(){ if(el) el.style.display='none'; },
+           fail(msg){ if(el) el.innerHTML = msg || 'Could not load 3D model'; } };
+}
+
+function mountSTL(container, url, opts={}){
+  const { scene, camera, controls } = makeStage(container, opts);
+  const ld = loader(container);
+  new STLLoader().load(url, geo=>{
+    geo.computeVertexNormals();
+    const mat = new THREE.MeshStandardMaterial({
+      color: new THREE.Color(opts.color || '#8a8f98'),
+      metalness: opts.metalness ?? 0.35, roughness: opts.roughness ?? 0.55 });
+    const mesh = new THREE.Mesh(geo, mat);
+    mesh.rotation.x = -Math.PI/2; // STLs are usually Z-up; stand it up
+    scene.add(mesh);
+    frame(mesh, camera, controls, 1.4);
+    ld.done();
+  }, undefined, ()=> ld.fail('3D model not found (add the .stl file)'));
+}
+
+function mountSVG(container, url, opts={}){
+  const { scene, camera, controls } = makeStage(container, opts);
+  const ld = loader(container);
+  new SVGLoader().load(url, data=>{
+    const group = new THREE.Group();
+    const depth = opts.depth ?? 40;
+    const mat = new THREE.MeshStandardMaterial({
+      color: new THREE.Color(opts.color || '#e9edf2'),
+      metalness: opts.metalness ?? 0.45, roughness: opts.roughness ?? 0.35 });
+    const shapes = [];
+    data.paths.forEach(p => SVGLoader.createShapes(p).forEach(s => shapes.push(s)));
+    shapes.forEach(shape=>{
+      const geo = new THREE.ExtrudeGeometry(shape, { depth, bevelEnabled:true, bevelThickness:2, bevelSize:1.5, bevelSegments:2 });
+      group.add(new THREE.Mesh(geo, mat));
+    });
+    group.scale.y = -1;           // SVG Y points down → flip so text is upright
+    scene.add(group);
+    frame(group, camera, controls, 1.25);
+    ld.done();
+  }, undefined, ()=> ld.fail('Vector not found (add the .svg file)'));
+}
+
+function mount3MF(container, url, opts={}){
+  const { scene, camera, controls } = makeStage(container, opts);
+  const ld = loader(container);
+  new ThreeMFLoader().load(url, obj=>{
+    const mat = new THREE.MeshStandardMaterial({
+      color: new THREE.Color(opts.color || '#e9edf2'),
+      metalness: opts.metalness ?? 0.45, roughness: opts.roughness ?? 0.4 });
+    obj.traverse(o=>{ if(o.isMesh){ o.material = mat; if(o.geometry && !o.geometry.attributes.normal) o.geometry.computeVertexNormals(); }});
+    obj.rotation.x = -Math.PI/2;   // Bambu exports Z-up; stand it up
+    scene.add(obj);
+    frame(obj, camera, controls, 1.3);
+    ld.done();
+  }, undefined, ()=> ld.fail('3D model not found'));
+}
+
+// Auto-mount any element with data attributes:
+//   <div class="viewer" data-model="models/helmet.stl" data-type="stl" data-color="#8a8f98"></div>
+function autoMount(){
+  document.querySelectorAll('.viewer[data-model]').forEach(el=>{
+    const type = (el.dataset.type||'').toLowerCase();
+    const opts = { color: el.dataset.color, depth: el.dataset.depth?parseFloat(el.dataset.depth):undefined, card: el.dataset.card==='true' };
+    if(type==='3mf') mount3MF(el, el.dataset.model, opts);
+    else if(type==='svg') mountSVG(el, el.dataset.model, opts);
+    else mountSTL(el, el.dataset.model, opts);
+  });
+}
+
   autoMount();
   document.getElementById('year').textContent = new Date().getFullYear();
   const io = new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }}),{threshold:.12});
